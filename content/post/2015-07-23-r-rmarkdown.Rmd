@@ -10,9 +10,10 @@ tags: ["R Markdown", "plot", "regression"]
 knitr::opts_chunk$set(collapse = TRUE)
 ```
 
-# R Markdown
+# Bitcoin Price Fluctuation & Prediction
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+My first blogpost is about predicting Bitcoin currency value.
+Fun Fact: An investment of $30 in Bitcoin in 2009 would be worth $1,000,000 today!
 
 You can embed an R code chunk like this:
 
