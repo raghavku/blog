@@ -15,24 +15,18 @@ knitr::opts_chunk$set(collapse = TRUE)
 My first blogpost is about predicting Bitcoin currency value.
 Fun Fact: An investment of $30 in Bitcoin in 2009 would be worth $1,000,000 today!
 
-You can embed an R code chunk like this:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Gc2en3nHxA4" frameborder="0" allowfullscreen></iframe>
 
-```{r cars}
-summary(cars)
-fit <- lm(dist ~ speed, data = cars)
-fit
-```
 
-# Including Plots
 
-You can also embed plots. See Figure \@ref(fig:pie) for example:
+![Bitcoin Historical Prices](/bitcoin_price.jpg)
 
-```{r pie, fig.cap='A fancy pie chart.', tidy=FALSE}
-par(mar = c(0, 1, 0, 1))
-pie(
-  c(280, 60, 20),
-  c('Sky', 'Sunny side of pyramid', 'Shady side of pyramid'),
-  col = c('#0292D8', '#F7EA39', '#C4B632'),
-  init.angle = -50, border = NA
-)
-```
+Since Bitcoin Prices are very volatile and do not carry a clear trend and seasonality, it was hard to predict accurate future values. This was especially true when trying to predict using a large amount of historical data, such as a five-year horizon. However, after running multiple models and reducing the data to more recent values, such as the past six months, I could generate a model that is reasonably accurate and robust.
+
+The model that performed the best was the ARIMA model (*To learn about ARIMA models, visit https://onlinecourses.science.psu.edu/stat510/node/66*). Despite the high fluctuation of the data, this model performed well without being overly complex. This could potentially translate into a valuable investment opportunity by giving insight into when we should buy Bitcoin to return a profit. At the same time, the models worked primarily in predicting future short-term data and did not give acceptable means to predict sharp future changes in trend; this could result in missed opportunities or detrimental investments.
+
+To gain further understanding of the price fluctuation and to potentially mitigate weakness in prediction of the models, I analyzed variables that appeared to correlate with Bitcoin prices. The variable that had the highest correlation out of 6 external economic indicators as the Dollar/Yuan Exchange rate. With this variable, one can potentially predict sudden changes in Bitcoin prices and help gain a deeper insight into the nature of this currency.
+
+From my analysis, I learned that for this volatile and unpredictable currency, it is best to use a model with more recent data and that it surprisingly does not require highly complex modeling to generate forecasts with reasonable accuracy. Additionally, I found that even with such unpredictable data, other variables could be correlated and give insight in how one can better predict Bitcoin prices in the future.
+
+![ARIMA Model](/ARIMA.jpg)
