@@ -1,17 +1,21 @@
 ---
-title: Analyzing Amazon's Stock Price
-author: Raghav Kumar
+title: "Analyzing Amazon's Stock Price"
+author: "Raghav Kumar"
 date: '2017-06-18'
 slug: Stock Analysis
-categories: []
 tags: []
+categories: []
 ---
-#Objective: To analyze and forecast closing prices of Amazon Inc.'s (AMZN) stock using machine learning extrapolatory algorithms.
+
+##Amazon Stock News
+<iframe width="560" height="315" src="https://www.youtube.com/embed/bfgPyu3PPJ0" frameborder="0" allowfullscreen></iframe>
+
+
+#Objective: To analyze and forecast closing prices of Amazon Inc.'s (AMZN) stock using extrapolatory analysis
 
 Data: The data has been extracted from _quantmod_ package. I have used AMZN stock's closing prices for the past 2 years. For further details on quantmod visit: http://www.quantmod.com/
 
-![Amazon Logo](/amazon.jpg)
-<iframe width="560" height="315" src="https://www.youtube.com/embed/bfgPyu3PPJ0" frameborder="0" allowfullscreen></iframe>
+![](https://www.famouslogos.us/images/amazon-logo.jpg)
 
 ```{r setup, include=FALSE}
 chooseCRANmirror(graphics=FALSE, ind=1)
@@ -21,23 +25,24 @@ install.packages("quantmod")
 install.packages("evaluate")
 ```
 
-##Loading required packages
 ```{r, include=FALSE}
 library(xts)
 library(zoo)
 library(quantmod)
+library(ggplot2)
+library(zoo)
+library(forecast)
+library(xts)
 getSymbols("AMZN",from="2015-06-15", to = "2017-06-15")
 ```
 ##Plot showing 5 year historical stock price
 ```{r}
-library(ggplot2)
 chartSeries(AMZN$AMZN.Close)
 ```
 
 ##Smoothing data to take the average of every 21 days (trading days in a month)
 ```{r}
 close.data=AMZN$AMZN.Close
-library(zoo)
 ma.centered = rollmean(close.data,k=21, align="center")
 ma.trailing = rollmean(close.data,k=21, align="right")
 ```
@@ -101,9 +106,8 @@ Assuming that the Holt Winter's Model is fairly accurate, AMZN's stock price wil
 
 ```{r}
 hw <- ets(train.ts, model = "ZZZ")
+hw$method
 hw.pred <- forecast(hw, h = nValid, level = 0)
-
-M3$method
 
 accuracy(hw.pred, valid.ts)[,5]
 

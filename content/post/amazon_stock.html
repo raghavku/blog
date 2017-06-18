@@ -1,28 +1,37 @@
 ---
-title: "Amazon_stock"
+title: "Analyzing Amazon's Stock Price"
 author: "Raghav Kumar"
-date: "June 18, 2017"
-output: html_document
+date: '2017-06-18'
+slug: Stock Analysis
+tags: []
+categories: []
 ---
 
 
 
-<div id="objective-to-analyze-and-forecast-closing-prices-of-amazon-inc.s-amzn-stock-using-machine-learning-extrapolatory-algorithms." class="section level1">
-<h1>Objective: To analyze and forecast closing prices of Amazon Inc.’s (AMZN) stock using machine learning extrapolatory algorithms.</h1>
+<div id="amazon-stock-news" class="section level2">
+<h2>Amazon Stock News</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/bfgPyu3PPJ0" frameborder="0" allowfullscreen>
+</iframe>
+</div>
+<div id="objective-to-analyze-and-forecast-closing-prices-of-amazon-inc.s-amzn-stock-using-extrapolatory" class="section level1">
+<h1>Objective: To analyze and forecast closing prices of Amazon Inc.’s (AMZN) stock using extrapolatory</h1>
 <p>Data: The data has been extracted from <em>quantmod</em> package. I have used AMZN stock’s closing prices for the past 2 years. For further details on quantmod visit: <a href="http://www.quantmod.com/" class="uri">http://www.quantmod.com/</a></p>
+<div class="figure">
+<img src="https://www.famouslogos.us/images/amazon-logo.jpg" />
+
+</div>
 <div id="loading-required-packages" class="section level2">
 <h2>Loading required packages</h2>
 </div>
 <div id="plot-showing-5-year-historical-stock-price" class="section level2">
 <h2>Plot showing 5 year historical stock price</h2>
-<pre class="r"><code>library(ggplot2)
-chartSeries(AMZN$AMZN.Close)</code></pre>
+<pre class="r"><code>chartSeries(AMZN$AMZN.Close)</code></pre>
 <p><img src="/post/amazon_stock_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 </div>
 <div id="smoothing-data-to-take-the-average-of-every-21-days-trading-days-in-a-month" class="section level2">
 <h2>Smoothing data to take the average of every 21 days (trading days in a month)</h2>
 <pre class="r"><code>close.data=AMZN$AMZN.Close
-library(zoo)
 ma.centered = rollmean(close.data,k=21, align=&quot;center&quot;)
 ma.trailing = rollmean(close.data,k=21, align=&quot;right&quot;)</code></pre>
 </div>
@@ -40,10 +49,11 @@ lines(ma.trailing, lwd = 2, lty = 2, col = &quot;blue&quot;) </code></pre>
 </div>
 <div id="creating-training-and-validation-sets-to-create-time-series-prediction" class="section level2">
 <h2>Creating training and validation sets to create Time Series Prediction</h2>
+<p>Clearly, a Moving Average Percent Error (MAPE) of 6.7% shows a good estimate for a one month validation period.</p>
 <pre class="r"><code>#Split the data into training and validation
-nValid = 15
-w = 21 #Moving average window 
-nTrain = length(close.data) - nValid
+nValid = 30 #One month validation period
+w = 21 #Moving average window (trading days in a month)
+nTrain = length(close.data) - nValid #23 month long training period
 train.ts = close.data[1:nTrain]
 valid.ts = close.data[(nTrain+1):(nTrain+nValid)]
 
@@ -62,20 +72,53 @@ ma.trailing.pred = ts(rep(last.ma, nValid))
 # let&#39;s find the actual observed average over the validation period
 accuracy(ma.trailing.pred,valid.ts)</code></pre>
 <pre><code>##                ME     RMSE      MAE      MPE     MAPE
-## Test set 47.65991 49.60221 47.65991 4.780065 4.780065</code></pre>
+## Test set 65.75476 69.82841 65.75476 6.701237 6.701237</code></pre>
 </div>
-<div id="plot-showing-prediction-vs.actual-stock-price" class="section level2">
-<h2>Plot showing prediction vs. actual stock price</h2>
+<div id="plot-showing-prediction-vs.actual-stock-price-moving-average-method" class="section level2">
+<h2>Plot showing prediction vs. actual stock price (Moving Average Method)</h2>
+<p>Assuming that we use the Moving Average method to predict AMZN stock price for the next two weeks, we can be 93.3% sure that the value will be approximately $976.</p>
 <pre class="r"><code>library(xts)
+library(zoo)
 pred1&lt;-xts(ma.trailing.pred,order.by=index(valid.ts))
-plot(valid.ts)
+plot(valid.ts, ylim=c(900,1100), main=&quot;Moving Average Test On Validation Period&quot;, ylab=&quot;Closing Price&quot;)
 lines(pred1,col=&quot;blue&quot;)</code></pre>
 <p><img src="/post/amazon_stock_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="plot-showing-prediction-vs.actual-stock-price-holt-winters-model" class="section level2">
+<h2>Plot showing prediction vs. actual stock price (Holt Winter’s Model)</h2>
+<p>The AAN Holt Winter’s Model _(Explained here: <a href="https://www.otexts.org/fpp/7/5)_" class="uri">https://www.otexts.org/fpp/7/5)_</a> accounts for Additive Noise and Trend. It is highly robust and accurate as it provides a MAPE of 1.19% on the training set and 1.49% on the test set. This model suggests that AMZN’s stock will provide a 3.5% return on investment in one month.</p>
+<p>Assuming that the Holt Winter’s Model is fairly accurate, AMZN’s stock price will be around $1010 one month from now.</p>
+<pre class="r"><code>hw &lt;- ets(train.ts, model = &quot;ZZZ&quot;)
+hw$method</code></pre>
+<pre><code>## [1] &quot;ETS(A,A,N)&quot;</code></pre>
+<pre class="r"><code>hw.pred &lt;- forecast(hw, h = nValid, level = 0)
+
+accuracy(hw.pred, valid.ts)[,5]</code></pre>
+<pre><code>## Training set     Test set 
+##     1.194354     1.490740</code></pre>
+<pre class="r"><code>plot(hw.pred)
+lines(valid.ts, lty=2)</code></pre>
+<p><img src="/post/amazon_stock_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>hw_pred &lt;- ets(close.data, model = &quot;AAN&quot;)
+hw_pred &lt;- forecast(hw_pred, h = 30, level = 0)
+
+hw_pred$mean</code></pre>
+<pre><code>## Time Series:
+## Start = 506 
+## End = 535 
+## Frequency = 1 
+##  [1]  977.5884  978.7062  979.8240  980.9419  982.0597  983.1776  984.2954
+##  [8]  985.4132  986.5311  987.6489  988.7668  989.8846  991.0024  992.1203
+## [15]  993.2381  994.3560  995.4738  996.5916  997.7095  998.8273  999.9451
+## [22] 1001.0630 1002.1808 1003.2987 1004.4165 1005.5343 1006.6522 1007.7700
+## [29] 1008.8879 1010.0057</code></pre>
 </div>
 </div>
 <div id="correlation-test-between-amazon-ebay-and-best-buy-stocks" class="section level1">
 <h1>Correlation Test Between Amazon, Ebay and Best Buy Stocks</h1>
-<p>To understand how Amazon’s competitors are performing in relation to its stock, I performed a linear regression analysis with Ebay and Best Buy’s one year stocks. Clearly, both stocks were statistically significant in my assessment and showed high R-squared values.</p>
+<div id="a-great-year-for-e-commerce-companies" class="section level2">
+<h2>A Great Year For E-Commerce Companies</h2>
+<p>To understand how Amazon’s competitors are performing in relation to its stock, I performed a linear regression analysis with Ebay and Best Buy’s one year stocks. Clearly, both stocks were statistically significant in my assessment and showed decent R-squared values. Correlation between Amazon and Ebay was 79%, and 84% between Amazon and Best Buy. Thus, in general all three companies follow a positive trend and are outperforming the S&amp;P 500.</p>
 <pre class="r"><code>library(quantmod)
 getSymbols(&quot;AMZN&quot;,from=&quot;2016-06-15&quot;, to = &quot;2017-06-15&quot;) # Amazon</code></pre>
 <pre><code>## [1] &quot;AMZN&quot;</code></pre>
@@ -138,7 +181,14 @@ summary(l1)</code></pre>
 ## F-statistic: 582.4 on 1 and 250 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code>library(ggplot2)
 ggplot(stocks, aes(x=stocks$AMZN.Close, y=stocks$EBAY.Close)) + geom_point() + theme_minimal() + stat_smooth(method=&quot;lm&quot;,colour=&quot;blue&quot;, se=FALSE) + ggtitle(&quot;Correlation: AMZN and EBAY&quot;)</code></pre>
-<p><img src="/post/amazon_stock_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="/post/amazon_stock_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(stocks, aes(x=stocks$AMZN.Close, y=stocks$BBY.Close)) + geom_point() + theme_minimal() + stat_smooth(method=&quot;lm&quot;,colour=&quot;blue&quot;, se=FALSE) + ggtitle(&quot;Correlation: AMZN and BBY&quot;) </code></pre>
-<p><img src="/post/amazon_stock_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<p><img src="/post/amazon_stock_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
+<pre class="r"><code>cor(stocks)</code></pre>
+<pre><code>##            AMZN.Close EBAY.Close BBY.Close
+## AMZN.Close  1.0000000  0.7886262 0.8364570
+## EBAY.Close  0.7886262  1.0000000 0.6912474
+## BBY.Close   0.8364570  0.6912474 1.0000000</code></pre>
+<p>Visit Amazon: <a href="https://www.amazon.com/" class="uri">https://www.amazon.com/</a></p>
+</div>
 </div>

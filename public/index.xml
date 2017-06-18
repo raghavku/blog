@@ -6,17 +6,27 @@
     <description>Recent content on A Hugo website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 08 Jun 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 18 Jun 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>What&#39;s The Magic Sauce For A Great Data Scientist?</title>
-      <link>/2017/06/08/analyzing-dj-patils-article-building-data-science-teams/</link>
-      <pubDate>Thu, 08 Jun 2017 00:00:00 +0000</pubDate>
+      <title>Analyzing Amazon&#39;s Stock Price</title>
+      <link>/2017/06/18/stock-analysis/</link>
+      <pubDate>Sun, 18 Jun 2017 00:00:00 +0000</pubDate>
       
-      <guid>/2017/06/08/analyzing-dj-patils-article-building-data-science-teams/</guid>
+      <guid>/2017/06/18/stock-analysis/</guid>
+      <description>Amazon Stock News   Objective: To analyze and forecast closing prices of Amazon Inc.’s (AMZN) stock using machine learning extrapolatory algorithms. Data: The data has been extracted from quantmod package. I have used AMZN stock’s closing prices for the past 2 years. For further details on quantmod visit: http://www.quantmod.com/
+ Loading required packages  Plot showing 5 year historical stock price chartSeries(AMZN$AMZN.Close)  Smoothing data to take the average of every 21 days (trading days in a month) close.</description>
+    </item>
+    
+    <item>
+      <title>What&#39;s The Magic Sauce For A Great Data Scientist?</title>
+      <link>/2017/06/17/analyzing-dj-patils-article-building-data-science-teams/</link>
+      <pubDate>Sat, 17 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/06/17/analyzing-dj-patils-article-building-data-science-teams/</guid>
       <description>How To Become A Data Scientist Technical expertise: the best data scientists typically have deep expertise in some scientific discipline. • Curiosity: a desire to go beneath the surface and discover and distill a problem down into a very clear set of hypotheses that can be tested. • Storytelling: the ability to use data to tell a story and to be able to communicate it effectively. • Cleverness: the ability to look at a problem in different, creative ways</description>
     </item>
     
@@ -48,16 +58,6 @@
       
       <guid>/about/</guid>
       <description>This is a Blog created by Raghav Kumar dedicated to Data Science.</description>
-    </item>
-    
-    <item>
-      <title>Amazon_stock</title>
-      <link>/1/01/01/amazon_stock/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/1/01/01/amazon_stock/</guid>
-      <description>Objective: To analyze and forecast closing prices of Amazon Inc.’s (AMZN) stock using machine learning extrapolatory algorithms. Data: The data has been extracted from quantmod package. I have used AMZN stock’s closing prices for the past 2 years. For further details on quantmod visit: http://www.quantmod.com/
-Loading required packages  Plot showing 5 year historical stock price library(ggplot2) chartSeries(AMZN$AMZN.Close)  Smoothing data to take the average of every 21 days (trading days in a month) close.</description>
     </item>
     
   </channel>
