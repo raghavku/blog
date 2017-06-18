@@ -15,8 +15,6 @@ categories: []
 
 Data: The data has been extracted from _quantmod_ package. I have used AMZN stock's closing prices for the past 2 years. For further details on quantmod visit: http://www.quantmod.com/
 
-![](https://www.famouslogos.us/images/amazon-logo.jpg)
-
 ```{r setup, include=FALSE}
 chooseCRANmirror(graphics=FALSE, ind=1)
 knitr::opts_chunk$set(echo = TRUE)
@@ -125,7 +123,7 @@ hw_pred$mean
 ##A Great Year For E-Commerce Companies
 To understand how Amazon's competitors are performing in relation to its stock, I performed a linear regression analysis with Ebay and Best Buy's one year stocks. Clearly, both stocks were statistically significant in my assessment and showed decent R-squared values. Correlation between Amazon and Ebay was 79%, and 84% between Amazon and Best Buy. Thus, in general all three companies follow a positive trend and are outperforming the S&P 500. 
 
-```{r}
+```{r, include=FALSE}
 library(quantmod)
 getSymbols("AMZN",from="2016-06-15", to = "2017-06-15") # Amazon
 getSymbols("EBAY",from="2016-06-15", to = "2017-06-15") # Ebay
@@ -134,6 +132,10 @@ AMZN = as.data.frame(AMZN[,4])
 EBAY = as.data.frame(EBAY[,4])
 BBY = as.data.frame(BBY[,4])
 stocks = cbind(AMZN, EBAY,BBY)
+```
+
+
+```{r}
 summary(stocks)
 
 library(stats)
@@ -150,5 +152,7 @@ ggplot(stocks, aes(x=stocks$AMZN.Close, y=stocks$BBY.Close)) + geom_point() + th
 cor(stocks)
 ```
 
+
+![](https://www.famouslogos.us/images/amazon-logo.jpg)
 
 Visit Amazon: https://www.amazon.com/
