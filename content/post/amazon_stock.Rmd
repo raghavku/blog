@@ -1,7 +1,7 @@
 ---
 title: Analyzing Amazon's Stock Price
 author: Raghav Kumar
-date: '2017-06-19'
+date: '2017-06-18'
 slug: Stock Analysis
 categories: []
 tags: []
