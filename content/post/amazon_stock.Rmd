@@ -1,8 +1,10 @@
 ---
-title: "Amazon_stock"
-author: "Raghav Kumar"
-date: "June 19, 2017"
-output: html_document
+title: Analyzing Amazon's Stock Price
+author: Raghav Kumar
+date: '2017-06-19'
+slug: Stock Analysis
+categories: []
+tags: []
 ---
 #Objective: To analyze and forecast closing prices of Amazon Inc.'s (AMZN) stock using machine learning extrapolatory algorithms.
 
