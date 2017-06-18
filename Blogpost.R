@@ -3,4 +3,4 @@ devtools::install_github('rstudio/blogdown')
 
 blogdown::serve_site() 
 # Server http://127.0.0.1:4321
-# Netlify URL: http://actuary-porcupine-32586.netlify.com/about/
+# Netlify URL: https://ragstheblogger.netlify.com/
