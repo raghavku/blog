@@ -1,0 +1,144 @@
+---
+title: "Amazon_stock"
+author: "Raghav Kumar"
+date: "June 18, 2017"
+output: html_document
+---
+
+
+
+<div id="objective-to-analyze-and-forecast-closing-prices-of-amazon-inc.s-amzn-stock-using-machine-learning-extrapolatory-algorithms." class="section level1">
+<h1>Objective: To analyze and forecast closing prices of Amazon Inc.’s (AMZN) stock using machine learning extrapolatory algorithms.</h1>
+<p>Data: The data has been extracted from <em>quantmod</em> package. I have used AMZN stock’s closing prices for the past 2 years. For further details on quantmod visit: <a href="http://www.quantmod.com/" class="uri">http://www.quantmod.com/</a></p>
+<div id="loading-required-packages" class="section level2">
+<h2>Loading required packages</h2>
+</div>
+<div id="plot-showing-5-year-historical-stock-price" class="section level2">
+<h2>Plot showing 5 year historical stock price</h2>
+<pre class="r"><code>library(ggplot2)
+chartSeries(AMZN$AMZN.Close)</code></pre>
+<p><img src="/post/amazon_stock_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="smoothing-data-to-take-the-average-of-every-21-days-trading-days-in-a-month" class="section level2">
+<h2>Smoothing data to take the average of every 21 days (trading days in a month)</h2>
+<pre class="r"><code>close.data=AMZN$AMZN.Close
+library(zoo)
+ma.centered = rollmean(close.data,k=21, align=&quot;center&quot;)
+ma.trailing = rollmean(close.data,k=21, align=&quot;right&quot;)</code></pre>
+</div>
+<div id="plot-showing-daily-closing-stock-prices-and-moving-averages-trailing-and-centered" class="section level2">
+<h2>Plot showing daily closing stock prices and moving averages (trailing and centered)</h2>
+<pre class="r"><code>plot(close.data,
+     ylab = &quot;Stock Price&quot;, # label for y-axis
+     xlab = &quot;Time&quot;,  # label for x-axis
+     bty = &quot;l&quot;, 
+     main = &quot;Amazon Closing Stock Prices&quot;
+     )
+lines(ma.centered, lwd = 2, col=2) 
+lines(ma.trailing, lwd = 2, lty = 2, col = &quot;blue&quot;) </code></pre>
+<p><img src="/post/amazon_stock_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="creating-training-and-validation-sets-to-create-time-series-prediction" class="section level2">
+<h2>Creating training and validation sets to create Time Series Prediction</h2>
+<pre class="r"><code>#Split the data into training and validation
+nValid = 15
+w = 21 #Moving average window 
+nTrain = length(close.data) - nValid
+train.ts = close.data[1:nTrain]
+valid.ts = close.data[(nTrain+1):(nTrain+nValid)]
+
+
+library(zoo)
+library(forecast)
+# Fit a trailing average smoother
+ma.trailing = rollmean(train.ts, k = w)
+
+# Find the last moving average in the taining period
+last.ma = tail(ma.trailing, 1)
+
+# Use the last moving average as the prediction for each month in the validation period
+ma.trailing.pred = ts(rep(last.ma, nValid))
+
+# let&#39;s find the actual observed average over the validation period
+accuracy(ma.trailing.pred,valid.ts)</code></pre>
+<pre><code>##                ME     RMSE      MAE      MPE     MAPE
+## Test set 47.65991 49.60221 47.65991 4.780065 4.780065</code></pre>
+</div>
+<div id="plot-showing-prediction-vs.actual-stock-price" class="section level2">
+<h2>Plot showing prediction vs. actual stock price</h2>
+<pre class="r"><code>library(xts)
+pred1&lt;-xts(ma.trailing.pred,order.by=index(valid.ts))
+plot(valid.ts)
+lines(pred1,col=&quot;blue&quot;)</code></pre>
+<p><img src="/post/amazon_stock_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+</div>
+<div id="correlation-test-between-amazon-ebay-and-best-buy-stocks" class="section level1">
+<h1>Correlation Test Between Amazon, Ebay and Best Buy Stocks</h1>
+<p>To understand how Amazon’s competitors are performing in relation to its stock, I performed a linear regression analysis with Ebay and Best Buy’s one year stocks. Clearly, both stocks were statistically significant in my assessment and showed high R-squared values.</p>
+<pre class="r"><code>library(quantmod)
+getSymbols(&quot;AMZN&quot;,from=&quot;2016-06-15&quot;, to = &quot;2017-06-15&quot;) # Amazon</code></pre>
+<pre><code>## [1] &quot;AMZN&quot;</code></pre>
+<pre class="r"><code>getSymbols(&quot;EBAY&quot;,from=&quot;2016-06-15&quot;, to = &quot;2017-06-15&quot;) # Ebay</code></pre>
+<pre><code>## [1] &quot;EBAY&quot;</code></pre>
+<pre class="r"><code>getSymbols(&quot;BBY&quot;,from=&quot;2016-06-15&quot;, to = &quot;2017-06-15&quot;) # Best Buy</code></pre>
+<pre><code>## [1] &quot;BBY&quot;</code></pre>
+<pre class="r"><code>AMZN = as.data.frame(AMZN[,4])
+EBAY = as.data.frame(EBAY[,4])
+BBY = as.data.frame(BBY[,4])
+stocks = cbind(AMZN, EBAY,BBY)
+summary(stocks)</code></pre>
+<pre><code>##    AMZN.Close       EBAY.Close      BBY.Close    
+##  Min.   : 691.4   Min.   :22.72   Min.   :29.34  
+##  1st Qu.: 763.7   1st Qu.:29.51   1st Qu.:38.08  
+##  Median : 808.7   Median :31.66   Median :43.87  
+##  Mean   : 820.7   Mean   :31.08   Mean   :42.65  
+##  3rd Qu.: 852.6   3rd Qu.:33.51   3rd Qu.:46.98  
+##  Max.   :1011.3   Max.   :36.14   Max.   :61.25</code></pre>
+<pre class="r"><code>library(stats)
+l1= lm(stocks$AMZN.Close ~ stocks$EBAY.Close,stocks)
+l2 = lm(stocks$AMZN.Close ~ stocks$BBY.Close,stocks)
+summary(l1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = stocks$AMZN.Close ~ stocks$EBAY.Close, data = stocks)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -91.750 -33.280  -6.823  30.144 107.756 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)        182.836     31.595   5.787 2.14e-08 ***
+## stocks$EBAY.Close   20.526      1.012  20.279  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 46.99 on 250 degrees of freedom
+## Multiple R-squared:  0.6219, Adjusted R-squared:  0.6204 
+## F-statistic: 411.3 on 1 and 250 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>summary(l2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = stocks$AMZN.Close ~ stocks$BBY.Close, data = stocks)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -113.85  -14.39    8.37   25.42   92.03 
+## 
+## Coefficients:
+##                  Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)      449.8297    15.5948   28.84   &lt;2e-16 ***
+## stocks$BBY.Close   8.6968     0.3604   24.13   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 41.88 on 250 degrees of freedom
+## Multiple R-squared:  0.6997, Adjusted R-squared:  0.6985 
+## F-statistic: 582.4 on 1 and 250 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>library(ggplot2)
+ggplot(stocks, aes(x=stocks$AMZN.Close, y=stocks$EBAY.Close)) + geom_point() + theme_minimal() + stat_smooth(method=&quot;lm&quot;,colour=&quot;blue&quot;, se=FALSE) + ggtitle(&quot;Correlation: AMZN and EBAY&quot;)</code></pre>
+<p><img src="/post/amazon_stock_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(stocks, aes(x=stocks$AMZN.Close, y=stocks$BBY.Close)) + geom_point() + theme_minimal() + stat_smooth(method=&quot;lm&quot;,colour=&quot;blue&quot;, se=FALSE) + ggtitle(&quot;Correlation: AMZN and BBY&quot;) </code></pre>
+<p><img src="/post/amazon_stock_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+</div>

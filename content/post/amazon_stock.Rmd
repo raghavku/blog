@@ -1,0 +1,148 @@
+---
+title: "Amazon_stock"
+author: "Raghav Kumar"
+date: "June 19, 2017"
+output: html_document
+---
+#Objective: To analyze and forecast closing prices of Amazon Inc.'s (AMZN) stock using machine learning extrapolatory algorithms.
+
+Data: The data has been extracted from _quantmod_ package. I have used AMZN stock's closing prices for the past 2 years. For further details on quantmod visit: http://www.quantmod.com/
+
+![Amazon Logo](/amazon.jpg)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/bfgPyu3PPJ0" frameborder="0" allowfullscreen></iframe>
+
+```{r setup, include=FALSE}
+chooseCRANmirror(graphics=FALSE, ind=1)
+knitr::opts_chunk$set(echo = TRUE)
+install.packages("forecast")
+install.packages("quantmod")
+install.packages("evaluate")
+```
+
+##Loading required packages
+```{r, include=FALSE}
+library(xts)
+library(zoo)
+library(quantmod)
+getSymbols("AMZN",from="2015-06-15", to = "2017-06-15")
+```
+##Plot showing 5 year historical stock price
+```{r}
+library(ggplot2)
+chartSeries(AMZN$AMZN.Close)
+```
+
+##Smoothing data to take the average of every 21 days (trading days in a month)
+```{r}
+close.data=AMZN$AMZN.Close
+library(zoo)
+ma.centered = rollmean(close.data,k=21, align="center")
+ma.trailing = rollmean(close.data,k=21, align="right")
+```
+
+##Plot showing daily closing stock prices and moving averages (trailing and centered)
+```{r}
+plot(close.data,
+     ylab = "Stock Price", # label for y-axis
+     xlab = "Time",  # label for x-axis
+     bty = "l", 
+     main = "Amazon Closing Stock Prices"
+     )
+lines(ma.centered, lwd = 2, col=2) 
+lines(ma.trailing, lwd = 2, lty = 2, col = "blue") 
+
+```
+
+##Creating training and validation sets to create Time Series Prediction
+
+Clearly, a Moving Average Percent Error (MAPE) of 6.7% shows a good estimate for a one month  validation period.
+```{r}
+#Split the data into training and validation
+nValid = 30 #One month validation period
+w = 21 #Moving average window (trading days in a month)
+nTrain = length(close.data) - nValid #23 month long training period
+train.ts = close.data[1:nTrain]
+valid.ts = close.data[(nTrain+1):(nTrain+nValid)]
+
+
+library(zoo)
+library(forecast)
+# Fit a trailing average smoother
+ma.trailing = rollmean(train.ts, k = w)
+
+# Find the last moving average in the taining period
+last.ma = tail(ma.trailing, 1)
+
+# Use the last moving average as the prediction for each month in the validation period
+ma.trailing.pred = ts(rep(last.ma, nValid))
+
+# let's find the actual observed average over the validation period
+accuracy(ma.trailing.pred,valid.ts)
+```
+
+##Plot showing prediction vs. actual stock price (Moving Average Method)
+
+Assuming that we use the Moving Average method to predict AMZN stock price for the next two weeks, we can be 93.3% sure that the value will be approximately $976.
+```{r}
+library(xts)
+library(zoo)
+pred1<-xts(ma.trailing.pred,order.by=index(valid.ts))
+plot(valid.ts, ylim=c(900,1100), main="Moving Average Test On Validation Period", ylab="Closing Price")
+lines(pred1,col="blue")
+```
+
+##Plot showing prediction vs. actual stock price (Holt Winter's Model)
+
+The AAN Holt Winter's Model _(Explained here: https://www.otexts.org/fpp/7/5)_ accounts for Additive Noise and Trend. It is highly robust and accurate as it provides a MAPE of 1.19% on the training set and 1.49% on the test set. This model suggests that AMZN's stock will provide a 3.5% return on investment in one month.
+
+Assuming that the Holt Winter's Model is fairly accurate, AMZN's stock price will be around $1010 one month from now.
+
+```{r}
+hw <- ets(train.ts, model = "ZZZ")
+hw.pred <- forecast(hw, h = nValid, level = 0)
+
+M3$method
+
+accuracy(hw.pred, valid.ts)[,5]
+
+plot(hw.pred)
+lines(valid.ts, lty=2)
+
+hw_pred <- ets(close.data, model = "AAN")
+hw_pred <- forecast(hw_pred, h = 30, level = 0)
+
+hw_pred$mean
+```
+
+#Correlation Test Between Amazon, Ebay and Best Buy Stocks
+
+##A Great Year For E-Commerce Companies
+To understand how Amazon's competitors are performing in relation to its stock, I performed a linear regression analysis with Ebay and Best Buy's one year stocks. Clearly, both stocks were statistically significant in my assessment and showed decent R-squared values. Correlation between Amazon and Ebay was 79%, and 84% between Amazon and Best Buy. Thus, in general all three companies follow a positive trend and are outperforming the S&P 500. 
+
+```{r}
+library(quantmod)
+getSymbols("AMZN",from="2016-06-15", to = "2017-06-15") # Amazon
+getSymbols("EBAY",from="2016-06-15", to = "2017-06-15") # Ebay
+getSymbols("BBY",from="2016-06-15", to = "2017-06-15") # Best Buy
+AMZN = as.data.frame(AMZN[,4])
+EBAY = as.data.frame(EBAY[,4])
+BBY = as.data.frame(BBY[,4])
+stocks = cbind(AMZN, EBAY,BBY)
+summary(stocks)
+
+library(stats)
+l1= lm(stocks$AMZN.Close ~ stocks$EBAY.Close,stocks)
+l2 = lm(stocks$AMZN.Close ~ stocks$BBY.Close,stocks)
+summary(l1)
+summary(l2)
+
+library(ggplot2)
+ggplot(stocks, aes(x=stocks$AMZN.Close, y=stocks$EBAY.Close)) + geom_point() + theme_minimal() + stat_smooth(method="lm",colour="blue", se=FALSE) + ggtitle("Correlation: AMZN and EBAY")
+
+ggplot(stocks, aes(x=stocks$AMZN.Close, y=stocks$BBY.Close)) + geom_point() + theme_minimal() + stat_smooth(method="lm",colour="blue", se=FALSE) + ggtitle("Correlation: AMZN and BBY") 
+
+cor(stocks)
+```
+
+
+Visit Amazon: https://www.amazon.com/
