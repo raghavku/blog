@@ -6,10 +6,29 @@
     <description>Recent content in Posts on A Hugo website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 06 Jun 2017 21:13:14 -0500</lastBuildDate>
+    <lastBuildDate>Thu, 08 Jun 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>What&#39;s The Magic Sauce For A Great Data Scientist?</title>
+      <link>/2017/06/08/analyzing-dj-patils-article-building-data-science-teams/</link>
+      <pubDate>Thu, 08 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/06/08/analyzing-dj-patils-article-building-data-science-teams/</guid>
+      <description>How To Become A Data Scientist Technical expertise: the best data scientists typically have deep expertise in some scientific discipline. • Curiosity: a desire to go beneath the surface and discover and distill a problem down into a very clear set of hypotheses that can be tested. • Storytelling: the ability to use data to tell a story and to be able to communicate it effectively. • Cleverness: the ability to look at a problem in different, creative ways</description>
+    </item>
+    
+    <item>
+      <title>Word Clouds using Twitter API</title>
+      <link>/2017/06/08/ixperience-word-cloud/</link>
+      <pubDate>Thu, 08 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/06/08/ixperience-word-cloud/</guid>
+      <description>Word Clouds using Twitter API iXperience Word Cloud iXperience Word Cloud
+ I’m going to show you how to build a Word Cloud using the latest tweets you’re interested in. As a part of iXperience’s intensive Data Science program, I was naturally interested in visualizing some of the words that are associated with “iXperience”. In order to create these beautiful Word Clouds, one has to first get access to Twitter’s API.</description>
+    </item>
     
     <item>
       <title>Raghav&#39;s Blog</title>
@@ -20,34 +39,6 @@
       <description>Bitcoin Price Fluctuation &amp;amp; Prediction My first blogpost is about predicting Bitcoin currency value. Fun Fact: An investment of $30 in Bitcoin in 2009 would be worth $1,000,000 today!
  Bitcoin Historical Prices
  Since Bitcoin Prices are very volatile and do not carry a clear trend and seasonality, it was hard to predict accurate future values. This was especially true when trying to predict using a large amount of historical data, such as a five-year horizon.</description>
-    </item>
-    
-    <item>
-      <title>Second New Post (in R Markdown)</title>
-      <link>/2017/06/05/second-new-post-in-r-markdown/</link>
-      <pubDate>Mon, 05 Jun 2017 00:00:00 +0000</pubDate>
-      
-      <guid>/2017/06/05/second-new-post-in-r-markdown/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>A Plain Markdown Post</title>
-      <link>/2016/12/30/a-plain-markdown-post/</link>
-      <pubDate>Fri, 30 Dec 2016 21:49:57 -0700</pubDate>
-      
-      <guid>/2016/12/30/a-plain-markdown-post/</guid>
-      <description>This is a post written in plain Markdown (*.md) instead of R Markdown (*.Rmd). The major differences are:
- You cannot run any R code in a plain Markdown document, whereas in an R Markdown document, you can embed R code chunks (```{r}); A plain Markdown post is rendered through Blackfriday, and an R Markdown document is compiled by rmarkdown and Pandoc.  There are many differences in syntax between Blackfriday&amp;rsquo;s Markdown and Pandoc&amp;rsquo;s Markdown.</description>
-    </item>
-    
-    <item>
-      <title>Lorem Ipsum</title>
-      <link>/2015/01/01/lorem-ipsum/</link>
-      <pubDate>Thu, 01 Jan 2015 13:09:13 -0600</pubDate>
-      
-      <guid>/2015/01/01/lorem-ipsum/</guid>
-      <description>Raghav Kumar dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</description>
     </item>
     
   </channel>

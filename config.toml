@@ -37,7 +37,7 @@ ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
 
     [params.logo]
     url = "RK.png"
-    width = 50
-    height = 50
+    width = 10
+    height = 10
     alt = "Logo"
 

@@ -1,9 +1,39 @@
 ---
-title: Second New Post (in R Markdown)
-author: ~
-date: '2017-06-05'
-slug: second-new-post-in-r-markdown
+title: Word Clouds using Twitter API
+author: Raghav Kumar
+date: '2017-06-08'
+slug: iXperience Word Cloud 
 categories: []
 tags: []
 ---
+
+# Word Clouds using Twitter API 
+
+##iXperience Word Cloud
+![iXperience Word Cloud](/ix_cloud.jpg)
+
+
+I'm going to show you how to build a Word Cloud using the latest tweets you're interested in. As a part of iXperience's intensive Data Science program, I was naturally interested in visualizing some of the words that are associated with "iXperience". In order to create these beautiful Word Clouds, one has to first get access to Twitter's API.
+
+Next, one can specify how many tweets they want to look at and extract the most frequent words to build a Word Cloud.
+```
+tweets = searchTwitter("iXperience", n = 100, lang = "en")
+
+# Extract text
+#
+twitter.text = sapply(tweets, function(x) x$getText())
+
+# Convert to data frame
+#
+ix_sentiment=do.call(rbind, lapply(tweets, function(x) x$toDataFrame()))
+```
+
+After removing stop words and unprintable data, one can create visualizations through the "wordcloud" function: 
+
+```
+# Create a word cloud. Change the resolution to get a good fit.
+png("twitter-word-cloud.png", width = 1200, height = 1200, res = 175)
+wordcloud(twitter.word_freq$word, twitter.word_freq$freq, random.order = TRUE, colors = rev(brewer.pal(8, "Dark2")),
+          min.freq = 2)
+```
 
