@@ -33,6 +33,7 @@ library(forecast)
 library(xts)
 getSymbols("AMZN",from="2015-06-15", to = "2017-06-15")
 ```
+
 ###Plot showing 5 year historical stock price
 ```{r}
 chartSeries(AMZN$AMZN.Close)
@@ -151,6 +152,23 @@ ggplot(stocks, aes(x=stocks$AMZN.Close, y=stocks$BBY.Close)) + geom_point() + th
 
 cor(stocks)
 ```
+
+
+
+#Stock Price vs. Percentage Growth of Market Capitalization and Total Assets
+
+Market Capitalization and Total Asset value have been increasing consistently. However, Market Capitalization has been growing at an increasing rate as compared to Total Asset Value. This indicates a low Book to Market value and high potential for long term gains in the future.
+
+
+<iframe width='100%' height='595px' src='https://stockrow.com/embeds/c4f4d3075fdf6d3eba66249ac80afbff' frameborder='0'></iframe>
+Visit _https://quantpedia.com/Screener/Details/26_ for more information on Book to Market Value and Value Investing.
+
+#Stock Price vs. Price to Book Ratio
+
+Increasing Price to Book ratio can indicate that the stock is overvalued in the market. Therefore, the growth of the stock price may decline in the coming months, reverting to the mean. Personally, I would invest in Amazon and hold on to the stock for long term gains.
+
+<iframe width='100%' height='595px' src='https://stockrow.com/embeds/8408f7149d687118b2b256e81b806b1f' frameborder='0'></iframe>
+
 
 
 ![](https://www.famouslogos.us/images/amazon-logo.jpg)
