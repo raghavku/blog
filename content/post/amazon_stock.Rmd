@@ -33,19 +33,19 @@ library(forecast)
 library(xts)
 getSymbols("AMZN",from="2015-06-15", to = "2017-06-15")
 ```
-##Plot showing 5 year historical stock price
+###Plot showing 5 year historical stock price
 ```{r}
 chartSeries(AMZN$AMZN.Close)
 ```
 
-##Smoothing data to take the average of every 21 days (trading days in a month)
+###Smoothing data to take the average of every 21 days (trading days in a month)
 ```{r}
 close.data=AMZN$AMZN.Close
 ma.centered = rollmean(close.data,k=21, align="center")
 ma.trailing = rollmean(close.data,k=21, align="right")
 ```
 
-##Plot showing daily closing stock prices and moving averages (trailing and centered)
+###Plot showing daily closing stock prices and moving averages (trailing and centered)
 ```{r}
 plot(close.data,
      ylab = "Stock Price", # label for y-axis
@@ -58,7 +58,7 @@ lines(ma.trailing, lwd = 2, lty = 2, col = "blue")
 
 ```
 
-##Creating training and validation sets to create Time Series Prediction
+###Creating training and validation sets to create Time Series Prediction
 
 Clearly, a Moving Average Percent Error (MAPE) of 6.7% shows a good estimate for a one month  validation period.
 ```{r}
@@ -85,7 +85,7 @@ ma.trailing.pred = ts(rep(last.ma, nValid))
 accuracy(ma.trailing.pred,valid.ts)
 ```
 
-##Plot showing prediction vs. actual stock price (Moving Average Method)
+###Plot showing prediction vs. actual stock price (Moving Average Method)
 
 Assuming that we use the Moving Average method to predict AMZN stock price for the next two weeks, we can be 93.3% sure that the value will be approximately $976.
 ```{r}
@@ -96,7 +96,7 @@ plot(valid.ts, ylim=c(900,1100), main="Moving Average Test On Validation Period"
 lines(pred1,col="blue")
 ```
 
-##Plot showing prediction vs. actual stock price (Holt Winter's Model)
+###Plot showing prediction vs. actual stock price (Holt Winter's Model)
 
 The AAN Holt Winter's Model _(Explained here: https://www.otexts.org/fpp/7/5)_ accounts for Additive Noise and Trend. It is highly robust and accurate as it provides a MAPE of 1.19% on the training set and 1.49% on the test set. This model suggests that AMZN's stock will provide a 3.5% return on investment in one month.
 
@@ -120,7 +120,7 @@ hw_pred$mean
 
 #Correlation Test Between Amazon, Ebay and Best Buy Stocks
 
-##A Great Year For E-Commerce Companies
+###A Great Year For E-Commerce Companies
 To understand how Amazon's competitors are performing in relation to its stock, I performed a linear regression analysis with Ebay and Best Buy's one year stocks. Clearly, both stocks were statistically significant in my assessment and showed decent R-squared values. Correlation between Amazon and Ebay was 79%, and 84% between Amazon and Best Buy. Thus, in general all three companies follow a positive trend and are outperforming the S&P 500. 
 
 ```{r, include=FALSE}
