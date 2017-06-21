@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on A Hugo website</title>
+    <title>Posts on From Rags To Riches</title>
     <link>/post/</link>
-    <description>Recent content in Posts on A Hugo website</description>
+    <description>Recent content in Posts on From Rags To Riches</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 18 Jun 2017 00:00:00 +0000</lastBuildDate>
@@ -17,8 +17,8 @@
       <pubDate>Sun, 18 Jun 2017 00:00:00 +0000</pubDate>
       
       <guid>/2017/06/18/stock-analysis/</guid>
-      <description>Amazon Stock News   Objective: To analyze and forecast closing prices of Amazon Inc.’s (AMZN) stock using machine learning extrapolatory algorithms. Data: The data has been extracted from quantmod package. I have used AMZN stock’s closing prices for the past 2 years. For further details on quantmod visit: http://www.quantmod.com/
- Loading required packages  Plot showing 5 year historical stock price chartSeries(AMZN$AMZN.Close)  Smoothing data to take the average of every 21 days (trading days in a month) close.</description>
+      <description>Amazon Stock News   Objective: To analyze and forecast closing prices of Amazon Inc.’s (AMZN) stock using extrapolatory analysis Data: The data has been extracted from quantmod package. I have used AMZN stock’s closing prices for the past 2 years. For further details on quantmod visit: http://www.quantmod.com/
+Plot showing 5 year historical stock price chartSeries(AMZN$AMZN.Close)  Smoothing data to take the average of every 21 days (trading days in a month) close.</description>
     </item>
     
     <item>
